@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+cert_file="${here}/host.pem"
+echo "Creating host TLS cert and key ..."
+(cd "$here" &&
+  cfssl gencert \
+    -ca=local-ca.pem \
+    -ca-key=local-ca-key.pem \
+    -config=ca-config.json \
+    -profile=local \
+    host-csr.json |
+  cfssljson -bare host)
+
+echo "Verifying host cert ..."
+tmp_cert_file="${cert_file}.tmp"
+(openssl x509 -in "$cert_file" -text > "$tmp_cert_file" &&
+  mv "$tmp_cert_file" "$cert_file")

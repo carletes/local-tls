@@ -1,0 +1,16 @@
+{
+  "CN": "local",
+  "hosts": [
+    "localhost",
+    "*.local"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "O": "Local development"
+    }
+  ]
+}

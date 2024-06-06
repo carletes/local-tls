@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+here=$(cd "$(dirname "$0")" && pwd)
+
+ca_cert_file="${here}/local-ca.pem"
+echo "Creating self-signed CA ..."
+(cd "$here" &&
+   cfssl gencert -initca "${here}/ca-csr.json" |
+       cfssljson -bare local-ca)
+
+echo "Verifying CA cert ..."
+tmp_ca_cert_file="${ca_cert_file}.tmp"
+(openssl x509 -in "$ca_cert_file" -text > "$tmp_ca_cert_file" &&
+  mv "$tmp_ca_cert_file" "$ca_cert_file")
